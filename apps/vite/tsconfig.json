@@ -2,7 +2,8 @@
   "extends": ["expo/tsconfig.base", "@miti/tsconfig/base"],
   "compilerOptions": {
     "strict": true,
-    "types": ["vite-plugin-pwa/client"]
+    "types": ["vite-plugin-pwa/client"],
+    "jsx": "react-jsx"
   },
   "include": ["**/*.ts", "**/*.tsx", "./index.js"],
   "exclude": ["src/service-worker"]

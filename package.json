@@ -37,6 +37,7 @@
   },
   "packageManager": "bun@1.1.31",
   "trustedDependencies": [
+    "@parcel/watcher",
     "@swc/core",
     "better-sqlite3",
     "bufferutil",
