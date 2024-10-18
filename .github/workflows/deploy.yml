@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
       - run: bun install
-      - name: Deploy API
+      - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -34,4 +34,4 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: './apps/expo'
           packageManager: bun
-          command: pages deploy ./dist --project-name=miti-web
+          command: pages deploy ./dist --project-name=miti-example-web

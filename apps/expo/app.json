@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "miti-mobile",
-    "slug": "miti-mobile",
+    "name": "miti-app",
+    "slug": "miti-app",
     "scheme": "io.veez.miti",
     "version": "1.0.0",
     "orientation": "portrait",

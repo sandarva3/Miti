@@ -10,6 +10,8 @@
     "start": "bun run --cwd apps/expo start",
     "web": "bun run --cwd apps/vite dev",
     "chrome": "bun run --cwd apps/plasmo dev",
+    "android": "bun run --cwd apps/expo android",
+    "ios": "bun run --cwd apps/expo ios",
     "api": "bun run --cwd ./apps/api dev",
     "check-deps": "check-dependency-version-consistency .",
     "lint": "turbo lint",
@@ -35,7 +37,6 @@
   },
   "packageManager": "bun@1.1.31",
   "trustedDependencies": [
-    "@parcel/watcher",
     "@swc/core",
     "better-sqlite3",
     "bufferutil",
