@@ -1,0 +1,10 @@
+{
+  "extends": ["@miti/tsconfig/base", "plasmo/templates/tsconfig.base"],
+  "compilerOptions": {
+    "paths": {
+      "~*": ["./*"]
+    },
+    "baseUrl": "."
+  },
+  "include": ["**/*.ts", "**/*.tsx", "./index.js", ".plasmo/index.d.ts"]
+}
