@@ -7,7 +7,7 @@ export async function checkIfUserIsLoggedInOrOffline(): Promise<{
   status: 'LOGGED_IN' | 'NOT_LOGGED_IN' | 'OFFLINE'
   data?: any
 }> {
-  const res = await fetch('/api/profile')
+  const res = await fetch('/api/user/profile')
   // console.log({ res });
   if (res.status === 200) {
     const data = await res.json()
@@ -20,13 +20,13 @@ export async function checkIfUserIsLoggedInOrOffline(): Promise<{
 }
 
 export const fetchUserEvents = async (startDate: string, endDate: string) => {
-  const res = await fetch(`/api/events?timeMin=${startDate}&timeMax=${endDate}`)
+  const res = await fetch(`/api/calendar/google/events?timeMin=${startDate}&timeMax=${endDate}`)
   const data = await res.json()
   return data
 }
 
 export const getCalendarList = async () => {
-  const res = await fetch(`/api/calendars`)
+  const res = await fetch(`/api/calendar/google/calendars`)
   const data = await res.json()
   // console.log({ data });
   return (

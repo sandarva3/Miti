@@ -1,11 +1,11 @@
-import NepaliDate from "nepali-date-converter";
-import { isSameDay } from "date-fns";
-import { CalendarEvent } from "../types/events.types";
-import { nepaliMonths } from "../constants/mahina";
+import NepaliDate from "nepali-date-converter"
+import { isSameDay } from "date-fns"
+import { CalendarEvent } from "../types/events.types"
+import { nepaliMonths } from "../constants/mahina"
 
 export function getTithiNepali(index: number): string {
   const tithiName: {
-    [key: number]: string;
+    [key: number]: string
   } = {
     1: "\u092a\u094d\u0930\u0924\u093f\u092a\u0926\u093e",
     2: "\u0926\u094d\u0935\u093f\u0924\u0940\u092f\u093e",
@@ -23,12 +23,12 @@ export function getTithiNepali(index: number): string {
     14: "\u091a\u0924\u0941\u0930\u094d\u0926\u0936\u0940",
     15: "\u092a\u0942\u0930\u094d\u0923\u093f\u092e\u093e",
     30: "\u0914\u0902\u0938\u0940",
-  };
-  return tithiName[index];
+  }
+  return tithiName[index] || ""
 }
 export function getTithiEnglish(index: number): string {
   const tithiName: {
-    [key: number]: string;
+    [key: number]: string
   } = {
     1: "Prathama",
     2: "Dwitiya",
@@ -46,9 +46,9 @@ export function getTithiEnglish(index: number): string {
     14: "Chaturdashi",
     15: "Purnima",
     30: "Ausi",
-  };
+  }
 
-  return tithiName[index];
+  return tithiName[index] ?? ""
 }
 
 export function getChandramaNepali(index: number): string {
@@ -77,9 +77,12 @@ export function getChandramaNepali(index: number): string {
     "\u0906\u0936\u094d\u0935\u093f\u0928 \u0915\u0943\u0937\u094d\u0923\u092a\u0915\u094d\u0937",
     "\u0906\u0936\u094d\u0935\u093f\u0928 \u0936\u0941\u0915\u094d\u0932\u092a\u0915\u094d\u0937",
     "\u0915\u093e\u0930\u094d\u0924\u093f\u0915 \u0915\u0943\u0937\u094d\u0923\u092a\u0915\u094d\u0937",
-  ];
+  ]
 
-  return (Math.floor(index - 1) < index - 1 ? "अधिक " : "") + chandraNames[Math.floor(index - 1)];
+  return (
+    (Math.floor(index - 1) < index - 1 ? "अधिक " : "") +
+    chandraNames[Math.floor(index - 1)]
+  )
 }
 export function getChandramaEnglish(index: number): string {
   const chandraNames = [
@@ -107,40 +110,63 @@ export function getChandramaEnglish(index: number): string {
     "Ashwin Krishna Paksha",
     "Ashwin Shuklapaksha",
     "Kartik Krishna Paksha",
-  ];
-  return (Math.floor(index - 1) < index - 1 ? "Adhik " : "") + chandraNames[Math.floor(index - 1)];
+  ]
+  return (
+    (Math.floor(index - 1) < index - 1 ? "Adhik " : "") +
+    chandraNames[Math.floor(index - 1)]
+  )
 }
 
-export const eventDuration = (event: CalendarEvent, isNepaliLanguage: boolean) => {
-  const startDate = new Date(event.start.dateTime || event.start.date || new Date());
-  const startNepaliDate = new NepaliDate(startDate);
-  const endDate = new Date(event.end.dateTime || event.end.date || new Date());
-  const endNepaliDate = new NepaliDate(endDate);
+export const eventDuration = (
+  event: CalendarEvent,
+  isNepaliLanguage: boolean
+) => {
+  const startDate = new Date(
+    event.start.dateTime || event.start.date || new Date()
+  )
+  const startNepaliDate = new NepaliDate(startDate)
+  const endDate = new Date(event.end.dateTime || event.end.date || new Date())
+  const endNepaliDate = new NepaliDate(endDate)
   if (event.end.date) {
-    endNepaliDate.setDate(endNepaliDate.getDate() - 1);
+    endNepaliDate.setDate(endNepaliDate.getDate() - 1)
   }
   if (isSameDay(startNepaliDate.toJsDate(), endNepaliDate.toJsDate())) {
-    if (event.end.date) return isNepaliLanguage ? "पुरा दिन" : "Full Day";
-    const locale = isNepaliLanguage ? "ne-NP" : "en-US";
-    const start = startDate.toLocaleString(locale, { hour: "numeric", minute: "numeric", hour12: true });
-    const end = endDate.toLocaleString(locale, { hour: "numeric", minute: "numeric", hour12: true });
-    return `${start} - ${end}`;
+    if (event.end.date) return isNepaliLanguage ? "पुरा दिन" : "Full Day"
+    const locale = isNepaliLanguage ? "ne-NP" : "en-US"
+    const start = startDate.toLocaleString(locale, {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    })
+    const end = endDate.toLocaleString(locale, {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    })
+    return `${start} - ${end}`
   }
-  const startMonth = nepaliMonths[startNepaliDate.getMonth()];
-  const endMonth = nepaliMonths[endNepaliDate.getMonth()];
+  const startMonth = nepaliMonths[startNepaliDate.getMonth()]
+  const endMonth = nepaliMonths[endNepaliDate.getMonth()]
   return isNepaliLanguage
-    ? `${startNepaliDate.getBS().date} ${startMonth.np}- ${endNepaliDate.getBS().date} ${endMonth.np}`
-    : `${startNepaliDate.getBS().date} ${startMonth.en} - ${endNepaliDate.getBS().date} ${endMonth.en}`;
-};
+    ? `${startNepaliDate.getBS().date} ${startMonth.np}- ${
+        endNepaliDate.getBS().date
+      } ${endMonth.np}`
+    : `${startNepaliDate.getBS().date} ${startMonth.en} - ${
+        endNepaliDate.getBS().date
+      } ${endMonth.en}`
+}
 
 /**
  * Get language-sensitive relative time message from elapsed time.
  * @param elapsed   - the elapsed time in days
  */
-export function relativeTimeFromElapsed(elapsed: number, isNepaliLanguage: boolean): string {
-  const loc = isNepaliLanguage ? "ne-NP" : "en-US";
-  const rtf = new Intl.RelativeTimeFormat(loc, { numeric: "auto" });
-  return rtf.format(elapsed, "day");
+export function relativeTimeFromElapsed(
+  elapsed: number,
+  isNepaliLanguage: boolean
+): string {
+  const loc = isNepaliLanguage ? "ne-NP" : "en-US"
+  const rtf = new Intl.RelativeTimeFormat(loc, { numeric: "auto" })
+  return rtf.format(elapsed, "day")
 }
 
 /**
@@ -154,14 +180,16 @@ export function relativeTimeFromDates(
   isNepaliLanguage = false,
   pivot = new Date()
 ): string {
-  if (!relative) return "";
+  if (!relative) return ""
 
   // Calculate the difference in days between the relative date and the current date
-  const dayInMillis = 24 * 60 * 60 * 1000; // Milliseconds in a day
-  const now = pivot.getTime();
-  const todayStart = new Date(now - (now % dayInMillis)).getTime();
-  const relativeDay = Math.round((relative.getTime() - todayStart) / dayInMillis);
+  const dayInMillis = 24 * 60 * 60 * 1000 // Milliseconds in a day
+  const now = pivot.getTime()
+  const todayStart = new Date(now - (now % dayInMillis)).getTime()
+  const relativeDay = Math.round(
+    (relative.getTime() - todayStart) / dayInMillis
+  )
 
   // Use the relativeTimeFromElapsed function to get the language-sensitive relative time message
-  return relativeTimeFromElapsed(relativeDay, isNepaliLanguage);
+  return relativeTimeFromElapsed(relativeDay, isNepaliLanguage)
 }

@@ -1,9 +1,9 @@
-import { Hono } from "hono";
+import { Context, Hono } from "hono";
 
 import type { AppContext } from "../../context";
 
 const UserController = new Hono<AppContext>()
-  .get("/", (c) => {
+  .get("/profile", (c) => {
     const user = c.get("user");
     return c.json(user);
   })
@@ -18,4 +18,13 @@ const UserController = new Hono<AppContext>()
     });
   });
 
-export { UserController };
+const fetchRefreshToken = async (c: Context<AppContext>, id: string) => {
+  return c
+    .get("db")
+    .query.users.findFirst({
+      where: (u, { eq }) => eq(u.id, id),
+    })
+    .then((user) => user?.refreshToken);
+};
+
+export { UserController, fetchRefreshToken };

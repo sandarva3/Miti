@@ -1,28 +1,33 @@
-import NepaliDate from 'nepali-date-converter'
-import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import colors from '../constants/colors'
+import NepaliDate from "nepali-date-converter"
+import { useEffect, useMemo, useState } from "react"
+import { Link } from "react-router-dom"
+import colors from "../constants/colors"
 import {
   getChandramaEnglish,
   getChandramaNepali,
   getTithiEnglish,
   getTithiNepali,
   relativeTimeFromDates,
-} from '../helper/dates'
-import nepaliNumber from '../helper/nepaliNumber'
-import useLanguage from '../helper/useLanguage'
-import useUser from '../helper/useUser'
-import { classNames } from '../helper/utils'
-import type { DayData } from '../types/calendar.types'
-import type { CalendarEventsResult } from '../types/events.types'
-import AddEventModal from './AddEventModal'
-import SingleUserEvent from './SingleUserEvent'
+} from "../helper/dates"
+import nepaliNumber from "../helper/nepaliNumber"
+import useLanguage from "../helper/useLanguage"
+import useUser from "../helper/useUser"
+import { classNames } from "../helper/utils"
+import type { DayData } from "../types/calendar.types"
+import type { CalendarEventsResult } from "../types/events.types"
+import AddEventModal from "./AddEventModal"
+import SingleUserEvent from "./SingleUserEvent"
 
 const getEventsOfSelectedDay = (events: CalendarEventsResult, day: Date) => {
   if (!events || !events.events.length) return []
+
   return events.events.filter((event) => {
-    const startDate = new Date(event.start.date || event.start.dateTime || day.toDateString())
-    const endDate = new Date(event.end.date || event.end.dateTime || day.toDateString())
+    const startDate = new Date(
+      event.start.date || event.start.dateTime || day.toDateString()
+    )
+    const endDate = new Date(
+      event.end.date || event.end.dateTime || day.toDateString()
+    )
     const dayStart = new Date(day)
     dayStart.setHours(0, 0, 0, 0)
     const dayEnd = new Date(day)
@@ -33,7 +38,10 @@ const getEventsOfSelectedDay = (events: CalendarEventsResult, day: Date) => {
 }
 
 const isSameMonth = (date1: NepaliDate, date2: NepaliDate) => {
-  return date1.getBS().year === date2.getBS().year && date1.getBS().month === date2.getBS().month
+  return (
+    date1.getBS().year === date2.getBS().year &&
+    date1.getBS().month === date2.getBS().month
+  )
 }
 export default function MonthCalendar({
   monthData,
@@ -56,7 +64,7 @@ export default function MonthCalendar({
   )
   const selectedDayData = useMemo(() => {
     const selectedDayIndex = selectedDay.getBS().date - 1
-    return monthData[selectedDayIndex]
+    return monthData[selectedDayIndex] as DayData
   }, [selectedDay, monthData])
 
   useEffect(() => {
@@ -66,20 +74,23 @@ export default function MonthCalendar({
   return (
     <>
       <div className="mt-6 grid grid-cols-7 text-xs leading-10 text-gray-500 dark:text-white">
-        <div>{t('homepage.S')}</div>
-        <div>{t('homepage.M')}</div>
-        <div>{t('homepage.T')}</div>
-        <div>{t('homepage.W')}</div>
-        <div>{t('homepage.Th')}</div>
-        <div>{t('homepage.F')}</div>
-        <div>{t('homepage.Sa')}</div>
+        <div>{t("homepage.S")}</div>
+        <div>{t("homepage.M")}</div>
+        <div>{t("homepage.T")}</div>
+        <div>{t("homepage.W")}</div>
+        <div>{t("homepage.Th")}</div>
+        <div>{t("homepage.F")}</div>
+        <div>{t("homepage.Sa")}</div>
       </div>
       <div className="isolate mx-1 mt-2 grid auto-rows-cell grid-cols-7 gap-px overflow-hidden rounded-md bg-gray-200 font-sans text-sm shadow ring-1 ring-gray-200 dark:bg-gray-800 dark:text-white dark:ring-gray-600">
         {monthData.map((day, dayIdx) => {
           const { bs_year, bs_month, bs_day } = day.AD_date
-          const dayInNepaliDate = new NepaliDate(`${bs_year}-${bs_month}-${bs_day}`)
+          const dayInNepaliDate = new NepaliDate(
+            `${bs_year}-${bs_month}-${bs_day}`
+          )
           const isSelectedDay =
-            selectedDay.format('YYYY/MM/DD') === dayInNepaliDate.format('YYYY/MM/DD')
+            selectedDay.format("YYYY/MM/DD") ===
+            dayInNepaliDate.format("YYYY/MM/DD")
           const isToday = today.toString() === dayInNepaliDate.toString()
           return (
             <button
@@ -90,20 +101,25 @@ export default function MonthCalendar({
               }}
               style={dayIdx === 0 ? { gridColumnStart: day.week_day + 1 } : {}}
               className={classNames(
-                'p-1 font-mukta leading-3 hover:bg-gray-100 focus:z-10',
-                (isSelectedDay || isToday) && 'font-semibold',
-                isToday && 'bg-indigo-200 font-semibold text-indigo-600',
-                !isSelectedDay && 'bg-white dark:bg-gray-900',
-                isSelectedDay && ' bg-indigo-600  text-white hover:bg-indigo-700',
-                isSelectedDay && 'bg-indigo-600',
-                (day.events.find((event) => event.jds?.gh == '1') || day.week_day === 6) &&
-                  'text-rose-600'
+                "p-1 font-mukta leading-3 hover:bg-gray-100 focus:z-10",
+                (isSelectedDay || isToday) && "font-semibold",
+                isToday && "bg-indigo-200 font-semibold text-indigo-600",
+                !isSelectedDay && "bg-white dark:bg-gray-900",
+                isSelectedDay &&
+                  " bg-indigo-600  text-white hover:bg-indigo-700",
+                isSelectedDay && "bg-indigo-600",
+                (day.events.find((event) => event.jds?.gh == "1") ||
+                  day.week_day === 6) &&
+                  "text-rose-600"
               )}
             >
               {!!userEvents?.events?.length &&
                 Array.from(
                   new Set(
-                    getEventsOfSelectedDay(userEvents, new Date(day.AD_date.ad)).map((event) => {
+                    getEventsOfSelectedDay(
+                      userEvents,
+                      new Date(day.AD_date.ad)
+                    ).map((event) => {
                       return event?.colorId || false
                     })
                   )
@@ -111,15 +127,17 @@ export default function MonthCalendar({
                   <span
                     key={i}
                     style={{
-                      backgroundColor: color ? colors[color] : '#475569',
+                      backgroundColor: color ? colors[color] : "#475569",
                     }}
-                    className={classNames(`mx-[1px] inline-block h-1 w-1 rounded-full`)}
+                    className={classNames(
+                      `mx-[1px] inline-block h-1 w-1 rounded-full`
+                    )}
                   ></span>
                 ))}
               <time
                 dateTime={day.AD_date.ad}
                 className={classNames(
-                  'mx-auto mt-0 flex items-center justify-center rounded-full pt-0 text-xl'
+                  "mx-auto mt-0 flex items-center justify-center rounded-full pt-0 text-xl"
                 )}
               >
                 {isNepaliLanguage ? nepaliNumber(day.day) : day.day}
@@ -137,7 +155,7 @@ export default function MonthCalendar({
           to={`/upcoming`}
           className="mt-8 block w-full rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
-          {t('homepage.View_all_events')}
+          {t("homepage.View_all_events")}
         </Link>
       </div>
       <div className="mx-2 mt-1 flex rounded-md border  bg-white p-4 shadow-lg dark:border-gray-600 dark:bg-gray-800 dark:text-white">
@@ -150,28 +168,34 @@ export default function MonthCalendar({
             </h1>
           </div>
           <p className="mt-2 text-sm text-gray-500 dark:text-white">
-            {selectedDay.toJsDate().toLocaleDateString(isNepaliLanguage ? 'ne-NP' : 'en-US', {
-              weekday: 'long',
-            })}
+            {selectedDay
+              .toJsDate()
+              .toLocaleDateString(isNepaliLanguage ? "ne-NP" : "en-US", {
+                weekday: "long",
+              })}
           </p>
         </div>
 
         <div className="ml-4 grow text-left">
           <h2 className="font-semibold">
-            {new Intl.DateTimeFormat(isNepaliLanguage ? 'ne-NP' : 'en-US', {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric',
+            {new Intl.DateTimeFormat(isNepaliLanguage ? "ne-NP" : "en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
             }).format(selectedDay.toJsDate())}
           </h2>
           <p className="mt-2 text-sm text-gray-500 dark:text-white">
             {isNepaliLanguage
               ? `${getTithiNepali(selectedDayData.AD_date.tithi)},
               ${getChandramaNepali(selectedDayData.AD_date.chandrama)} •
-              ${selectedDayData?.events.map((event) => event?.jds?.ne).join(' | ')}`
+              ${selectedDayData?.events
+                .map((event) => event?.jds?.ne)
+                .join(" | ")}`
               : `${getTithiEnglish(selectedDayData?.AD_date?.tithi)},
               ${getChandramaEnglish(selectedDayData?.AD_date?.chandrama)} •
-              ${selectedDayData?.events.map((event) => event?.jds?.en).join(' | ')}`}
+              ${selectedDayData?.events
+                .map((event) => event?.jds?.en)
+                .join(" | ")}`}
           </p>
         </div>
         <div className="ml-10 flex-col text-end">
@@ -180,13 +204,13 @@ export default function MonthCalendar({
           </h1>
         </div>
       </div>
-      {selectedDayData?.ad && status === 'LOGGED_IN' && (
+      {selectedDayData?.ad && status === "LOGGED_IN" && (
         <AddEventModal startDate={selectedDay.toJsDate()} />
       )}
       {!!userEvents?.events?.length &&
-        getEventsOfSelectedDay(userEvents, new Date(selectedDayData?.ad))?.map((event) => (
-          <SingleUserEvent key={event.id} event={event} />
-        ))}
+        getEventsOfSelectedDay(userEvents, new Date(selectedDayData?.ad))?.map(
+          (event) => <SingleUserEvent key={event.id} event={event} />
+        )}
     </>
   )
 }

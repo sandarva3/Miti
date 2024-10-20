@@ -8,7 +8,7 @@ import type { AppContext } from "../context";
 import { sessionTable } from "../database/sessions";
 import { userTable } from "../database/users";
 
-export const initializeLucia = (c: Context<AppContext>) => {
+export const initializeLucia = (c: Context<AppContext>): Lucia => {
   let lucia = c.get("lucia");
   if (lucia) {
     return lucia;

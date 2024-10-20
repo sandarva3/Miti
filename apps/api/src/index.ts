@@ -3,10 +3,11 @@ import { env } from "hono/adapter";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 
-import { AuthMiddleware } from "./auth/auth.middleware";
+import { authMiddleware } from "./auth/auth.middleware";
 import { initializeLucia } from "./auth/lucia-auth";
 import type { AppContext } from "./context";
 import { AuthController } from "./controller/auth/auth.controller";
+import { GoogleCalendarController } from "./controller/calendar/google-calendar.controller";
 import { UserController } from "./controller/user/user.controller";
 import { initalizeDB } from "./database/db";
 
@@ -26,9 +27,12 @@ app
   .get("/health", (c) => {
     return c.json({ status: "ok" });
   })
-  .use(AuthMiddleware);
+  .use(authMiddleware);
 
-const routes = app.route("/auth", AuthController).route("/user", UserController);
+const routes = app
+  .route("/auth", AuthController)
+  .route("/user", UserController)
+  .route("/calendar/google", GoogleCalendarController);
 
 export type AppType = typeof routes;
 export default app;

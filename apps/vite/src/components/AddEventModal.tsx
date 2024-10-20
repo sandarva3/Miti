@@ -1,74 +1,97 @@
-import { useState } from "react";
-import { CalendarIcon, PlusIcon } from "@heroicons/react/20/solid";
-import { PencilSquareIcon, MapPinIcon, Bars3BottomLeftIcon, SwatchIcon } from "@heroicons/react/24/outline";
-import colors from "../constants/colors";
-import { Switch } from "@headlessui/react";
-import NepaliDatePicker from "./NepaliDatePicker";
-import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import { CalendarEvent } from "../types/events.types";
-import { toast } from "react-hot-toast";
-import { getCalendarList } from "../helper/api";
-import DropDown from "./DropDown";
-import Spinner from "./Spinner";
+import { useState } from "react"
+import { CalendarIcon, PlusIcon } from "@heroicons/react/20/solid"
+import {
+  PencilSquareIcon,
+  MapPinIcon,
+  Bars3BottomLeftIcon,
+  SwatchIcon,
+} from "@heroicons/react/24/outline"
+import colors from "../constants/colors"
+import { Switch } from "@headlessui/react"
+import NepaliDatePicker from "./NepaliDatePicker"
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query"
+import { CalendarEvent } from "../types/events.types"
+import { toast } from "react-hot-toast"
+import { getCalendarList } from "../helper/api"
+import DropDown from "./DropDown"
+import Spinner from "./Spinner"
 
 function getCombinedDateTime(date: Date, time: string) {
-  const timeParts = time.split(":");
-  date.setHours(parseInt(timeParts[0], 10));
-  date.setMinutes(parseInt(timeParts[1], 10));
-  return date.toISOString();
+  const timeParts = time.split(":")
+  date.setHours(parseInt(timeParts[0] ?? "", 10))
+  date.setMinutes(parseInt(timeParts[1] ?? "", 10))
+  return date.toISOString()
 }
 //create a type called CalendarPayload which is Partial of CalendarEvent and also includes calendarId
-type CalendarPayload = Partial<CalendarEvent> & { calendarId: string };
+type CalendarPayload = Partial<CalendarEvent> & { calendarId: string }
 
 function AddEventModal({ startDate }: { startDate: Date }) {
-  const [openModel, setOpenModel] = useState(false);
-  const [isAllDayEvent, setIsAllDayEvent] = useState(false);
-  const [eventStartDate, setEventStartDate] = useState(startDate);
-  const [eventEndDate, setEventEndDate] = useState(new Date(startDate.getTime() + 24 * 60 * 60 * 1000));
-  const [selectedCalendar, setSelectedCalendar] = useState<string | number>("");
+  const [openModel, setOpenModel] = useState(false)
+  const [isAllDayEvent, setIsAllDayEvent] = useState(false)
+  const [eventStartDate, setEventStartDate] = useState(startDate)
+  const [eventEndDate, setEventEndDate] = useState(
+    new Date(startDate.getTime() + 24 * 60 * 60 * 1000)
+  )
+  const [selectedCalendar, setSelectedCalendar] = useState<string | number>("")
 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   const { mutateAsync, isLoading } = useMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries(["events"]);
-      setOpenModel(false);
+      queryClient.invalidateQueries(["events"])
+      setOpenModel(false)
     },
     onError: () => {
-      toast.error("Something went wrong while creating event");
+      toast.error("Something went wrong while creating event")
     },
     mutationFn: async (eventData: CalendarPayload) => {
-      const res = await fetch("/api/create", {
+      const res = await fetch("/api/calendar/google/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(eventData),
-      });
-      return await res.json();
+      })
+      return await res.json()
     },
-  });
+  })
   const { data: calendarList, isLoading: isCalendarListLoading } = useQuery({
     queryKey: ["calendarList"],
     queryFn: () => getCalendarList(),
     onSuccess: (data) => {
-      if (selectedCalendar === "") setSelectedCalendar(data[0].value);
+      if (selectedCalendar === "") setSelectedCalendar(data[0].value)
     },
     networkMode: "offlineFirst",
-  });
+  })
 
   const handelSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
     const startEndDates = isAllDayEvent
       ? {
           start: {
-            date: new Date(eventStartDate.getTime() + 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+            date: new Date(eventStartDate.getTime() + 24 * 60 * 60 * 1000)
+              .toISOString()
+              .split("T")[0],
           },
-          end: { date: new Date(eventEndDate.getTime() + 24 * 60 * 60 * 1000).toISOString().split("T")[0] },
+          end: {
+            date: new Date(eventEndDate.getTime() + 24 * 60 * 60 * 1000)
+              .toISOString()
+              .split("T")[0],
+          },
         }
       : {
-          start: { dateTime: getCombinedDateTime(startDate, e.currentTarget.startTime.value) },
-          end: { dateTime: getCombinedDateTime(eventEndDate, e.currentTarget.endTime.value) },
-        };
+          start: {
+            dateTime: getCombinedDateTime(
+              startDate,
+              e.currentTarget.startTime.value
+            ),
+          },
+          end: {
+            dateTime: getCombinedDateTime(
+              eventEndDate,
+              e.currentTarget.endTime.value
+            ),
+          },
+        }
 
     const eventData = {
       ...startEndDates,
@@ -77,18 +100,19 @@ function AddEventModal({ startDate }: { startDate: Date }) {
       description: e.currentTarget.description.value,
       colorId: e.currentTarget.colorId.value || null,
       calendarId: `${selectedCalendar}` || "personal",
-    };
-    await mutateAsync(eventData);
+    }
+    await mutateAsync(eventData)
     // console.log({ event: data });
-  };
+  }
   if (!openModel)
     return (
       <button
         className="shadowfocus:outline-none fixed bottom-2 right-2 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-indigo-600  text-white md:bottom-5"
-        onClick={() => setOpenModel(true)}>
+        onClick={() => setOpenModel(true)}
+      >
         <PlusIcon className="m-3" />
       </button>
-    );
+    )
   return (
     <div className="fixed inset-0 flex items-end bg-gray-900/50 md:items-center md:justify-center ">
       <div className="flex-end w-full rounded-t-lg bg-white px-4 pb-4 dark:bg-gray-800 md:w-2/3 md:rounded-b-lg lg:w-2/4">
@@ -103,13 +127,16 @@ function AddEventModal({ startDate }: { startDate: Date }) {
                 <Switch
                   checked={isAllDayEvent}
                   onChange={() => {
-                    setIsAllDayEvent(!isAllDayEvent);
-                    setEventStartDate(new Date(eventStartDate));
-                    setEventEndDate(new Date(eventEndDate));
+                    setIsAllDayEvent(!isAllDayEvent)
+                    setEventStartDate(new Date(eventStartDate))
+                    setEventEndDate(new Date(eventEndDate))
                   }}
                   className={`${
-                    isAllDayEvent ? "border bg-indigo-600" : "border bg-gray-200 dark:bg-gray-800"
-                  }  inline-flex h-6 w-11 items-center rounded-full transition-all duration-100 ease-linear`}>
+                    isAllDayEvent
+                      ? "border bg-indigo-600"
+                      : "border bg-gray-200 dark:bg-gray-800"
+                  }  inline-flex h-6 w-11 items-center rounded-full transition-all duration-100 ease-linear`}
+                >
                   <span className="sr-only">toggle all day event</span>
                   <span
                     className={`${
@@ -120,7 +147,10 @@ function AddEventModal({ startDate }: { startDate: Date }) {
               </div>
               <div className="my-2 flex w-full items-center gap-2 dark:text-white">
                 <span>From: </span>
-                <NepaliDatePicker setDate={setEventStartDate} date={eventStartDate} />
+                <NepaliDatePicker
+                  setDate={setEventStartDate}
+                  date={eventStartDate}
+                />
                 {!isAllDayEvent && (
                   <input
                     required
@@ -132,7 +162,10 @@ function AddEventModal({ startDate }: { startDate: Date }) {
               </div>
               <div className="my-2 flex w-full items-center gap-2 dark:text-white">
                 <span>To:</span>
-                <NepaliDatePicker setDate={setEventEndDate} date={eventEndDate} />
+                <NepaliDatePicker
+                  setDate={setEventEndDate}
+                  date={eventEndDate}
+                />
                 {!isAllDayEvent && (
                   <input
                     required
@@ -196,7 +229,7 @@ function AddEventModal({ startDate }: { startDate: Date }) {
                         }}
                         className={`m-1 h-6 w-6 cursor-pointer appearance-none rounded-full border border-gray-300 shadow-sm outline-none focus:outline-blue-600`}
                       />
-                    );
+                    )
                   })}
                 </div>
               </div>
@@ -205,13 +238,15 @@ function AddEventModal({ startDate }: { startDate: Date }) {
               <button
                 className="shadowfocus:outline-none mt-8
                 w-full rounded-md border border-indigo-600 border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-indigo-600 focus:ring-2  focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-200  "
-                onClick={() => setOpenModel(false)}>
+                onClick={() => setOpenModel(false)}
+              >
                 Close
               </button>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="mt-8 w-full rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-progress disabled:bg-indigo-400">
+                className="mt-8 w-full rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-progress disabled:bg-indigo-400"
+              >
                 Add Event
               </button>
             </div>
@@ -219,7 +254,7 @@ function AddEventModal({ startDate }: { startDate: Date }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default AddEventModal;
+export default AddEventModal

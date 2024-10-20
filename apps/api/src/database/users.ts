@@ -6,4 +6,5 @@ export const userTable = sqliteTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: integer("email_verified").notNull(),
   profilePictureUrl: text("profile_picture_url"),
+  refreshToken: text("refresh_token").notNull(),
 });

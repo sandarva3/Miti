@@ -1,12 +1,14 @@
 import type { Context } from "hono";
 import { env } from "hono/adapter";
-import type { User } from "lucia";
+import { getCookie } from "hono/cookie";
+import { createMiddleware } from "hono/factory";
+import type { Session, User } from "lucia";
 import { verifyRequestOrigin } from "lucia";
 
 import type { AppContext } from "../context";
 import type { DatabaseUserAttributes } from "./lucia-auth";
 
-export const AuthMiddleware = async (c: Context<AppContext>, next: () => Promise<void>) => {
+export const authMiddleware = createMiddleware<AppContext>(async (c, next) => {
   if (c.req.path.startsWith("/auth")) {
     return next();
   }
@@ -24,9 +26,7 @@ export const AuthMiddleware = async (c: Context<AppContext>, next: () => Promise
     });
   }
 
-  const authorizationHeader = c.req.header("Authorization");
-  const bearerSessionId = lucia.readBearerToken(authorizationHeader ?? "");
-  const sessionId = bearerSessionId;
+  const sessionId = getCookie(c, "session");
   if (!sessionId) {
     return new Response("Unauthorized", { status: 401 });
   }
@@ -41,4 +41,4 @@ export const AuthMiddleware = async (c: Context<AppContext>, next: () => Promise
   c.set("user", user as User & DatabaseUserAttributes);
   c.set("session", session);
   await next();
-};
+});
