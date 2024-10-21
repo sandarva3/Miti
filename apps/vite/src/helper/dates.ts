@@ -1,4 +1,4 @@
-import NepaliDate from "nepali-date-converter"
+import NepaliDate from "nepali-datetime"
 import { isSameDay } from "date-fns"
 import { CalendarEvent } from "../types/events.types"
 import { nepaliMonths } from "../constants/mahina"
@@ -130,7 +130,9 @@ export const eventDuration = (
   if (event.end.date) {
     endNepaliDate.setDate(endNepaliDate.getDate() - 1)
   }
-  if (isSameDay(startNepaliDate.toJsDate(), endNepaliDate.toJsDate())) {
+  if (
+    isSameDay(startNepaliDate.getDateObject(), endNepaliDate.getDateObject())
+  ) {
     if (event.end.date) return isNepaliLanguage ? "पुरा दिन" : "Full Day"
     const locale = isNepaliLanguage ? "ne-NP" : "en-US"
     const start = startDate.toLocaleString(locale, {
@@ -148,12 +150,12 @@ export const eventDuration = (
   const startMonth = nepaliMonths[startNepaliDate.getMonth()]
   const endMonth = nepaliMonths[endNepaliDate.getMonth()]
   return isNepaliLanguage
-    ? `${startNepaliDate.getBS().date} ${startMonth.np}- ${
-        endNepaliDate.getBS().date
-      } ${endMonth.np}`
-    : `${startNepaliDate.getBS().date} ${startMonth.en} - ${
-        endNepaliDate.getBS().date
-      } ${endMonth.en}`
+    ? `${startNepaliDate.getDate()} ${
+        startMonth?.np
+      }- ${endNepaliDate.getDate()} ${endMonth?.np}`
+    : `${startNepaliDate.getDate()} ${
+        startMonth?.en
+      } - ${endNepaliDate.getDate()} ${endMonth?.en}`
 }
 
 /**

@@ -1,19 +1,18 @@
-import { ArrowsRightLeftIcon } from '@heroicons/react/20/solid'
-import NepaliDate from 'nepali-date-converter'
-import NepaliDatePicker from '../components/NepaliDatePicker'
-import { np_nepaliMonths as nepaliMonths } from '../constants/mahina'
-import nepaliNumber from '../helper/nepaliNumber'
+import { ArrowsRightLeftIcon } from "@heroicons/react/20/solid"
+import NepaliDate from "nepali-datetime"
+import NepaliDatePicker from "../components/NepaliDatePicker"
+import { np_nepaliMonths as nepaliMonths } from "../constants/mahina"
+import nepaliNumber from "../helper/nepaliNumber"
 
-import { type ChangeEvent, useState } from 'react'
-import useLanguage from '../helper/useLanguage'
+import { type ChangeEvent, useState } from "react"
+import useLanguage from "../helper/useLanguage"
 
-import { format } from 'date-fns'
+import { format } from "date-fns"
 const DateConverter = () => {
   const [date, setDate] = useState(new Date())
-  // const [nepaliDate, setNepaliDate] = useState<NepaliDate>(new NepaliDate(new Date()));
   const nepaliDate = new NepaliDate(date)
-  const minDate = '1943-04-14'
-  const maxDate = '2034-04-13'
+  const minDate = "1943-04-14"
+  const maxDate = "2034-04-13"
 
   const { t } = useLanguage()
 
@@ -32,14 +31,16 @@ const DateConverter = () => {
     <>
       <div className="mx-auto mt-10 flex max-w-3xl flex-col items-center pb-20 text-center font-mukta lg:col-start-8 lg:col-end-13 lg:row-start-1 lg:mt-9 xl:col-start-9">
         <div className=" font-mukta text-2xl font-semibold dark:text-white">
-          {t('dc.Date_Converter')}
+          {t("dc.Date_Converter")}
         </div>
         <div className="mt-5 w-4/5 sm:w-full">
           <div className="flex flex-col  items-center justify-around  pb-5 sm:flex-row sm:items-center">
             <div className="flex flex-row items-center gap-2 sm:flex-col">
               <div className="font-mukta font-semibold">
-                {' '}
-                <span className="hidden dark:text-white sm:inline-block">{t('dc.B.S')}</span>
+                {" "}
+                <span className="hidden dark:text-white sm:inline-block">
+                  {t("dc.B.S")}
+                </span>
               </div>
               <NepaliDatePicker date={date} setDate={setDate} />
             </div>
@@ -51,12 +52,15 @@ const DateConverter = () => {
             </div>
             <div className="flex flex-row items-center gap-2 sm:flex-col">
               <div className="font-mukta font-semibold">
-                {' '}
-                <span className="hidden dark:text-white sm:inline-block"> {t('dc.A.D')}</span>
+                {" "}
+                <span className="hidden dark:text-white sm:inline-block">
+                  {" "}
+                  {t("dc.A.D")}
+                </span>
               </div>
               <input
                 type="date"
-                value={format(date, 'yyyy-MM-dd')}
+                value={format(date, "yyyy-MM-dd")}
                 onChange={handleChange}
                 className="cursor-pointer appearance-none rounded-md border px-20 py-3 text-sm shadow-sm outline-none dark:bg-gray-800 dark:text-white  sm:px-10 "
                 max={maxDate}
@@ -71,15 +75,15 @@ const DateConverter = () => {
               nepaliMonths[nepaliDate.getMonth()]
             } ${nepaliNumber(
               `${nepaliDate.getDate()}, ${nepaliDate
-                .toJsDate()
-                .toLocaleString('ne-NP', { weekday: 'long' })}`
+                .getDateObject()
+                .toLocaleString("ne-NP", { weekday: "long" })}`
             )}`}
           </p>
           <p className="font-mukta text-2xl font-semibold dark:text-white">
-            {`${date.toLocaleString('default', {
-              weekday: 'long',
-            })} ${date.getDate()}, ${date.toLocaleString('default', {
-              month: 'long',
+            {`${date.toLocaleString("default", {
+              weekday: "long",
+            })} ${date.getDate()}, ${date.toLocaleString("default", {
+              month: "long",
             })} ${date.getFullYear()}`}
           </p>
         </div>

@@ -1,4 +1,4 @@
-import NepaliDate from "nepali-date-converter"
+import NepaliDate from "nepali-datetime"
 import { useEffect, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import colors from "../constants/colors"
@@ -39,8 +39,7 @@ const getEventsOfSelectedDay = (events: CalendarEventsResult, day: Date) => {
 
 const isSameMonth = (date1: NepaliDate, date2: NepaliDate) => {
   return (
-    date1.getBS().year === date2.getBS().year &&
-    date1.getBS().month === date2.getBS().month
+    date1.getYear() === date2.getYear() && date1.getYear() === date2.getYear()
   )
 }
 export default function MonthCalendar({
@@ -63,7 +62,7 @@ export default function MonthCalendar({
     isSameMonth(today, firstDay) ? today : firstDay
   )
   const selectedDayData = useMemo(() => {
-    const selectedDayIndex = selectedDay.getBS().date - 1
+    const selectedDayIndex = selectedDay.getDate() - 1
     return monthData[selectedDayIndex] as DayData
   }, [selectedDay, monthData])
 
@@ -143,7 +142,7 @@ export default function MonthCalendar({
                 {isNepaliLanguage ? nepaliNumber(day.day) : day.day}
               </time>
               <span className="mx-auto my-0 mt-0 py-0 text-[9px] font-extralight">
-                {dayInNepaliDate.getAD().date}
+                {dayInNepaliDate.getEnglishDate()}
               </span>
             </button>
           )
@@ -163,13 +162,13 @@ export default function MonthCalendar({
           <div className="flex h-12 w-12 items-center justify-center rounded-full border border-blue-100 bg-blue-50 font-semibold dark:bg-gray-600 dark:text-gray-100">
             <h1>
               {isNepaliLanguage
-                ? nepaliNumber(`${selectedDay.getBS().date}`)
-                : selectedDay.getBS().date}
+                ? nepaliNumber(`${selectedDay.getDate()}`)
+                : selectedDay.getDate()}
             </h1>
           </div>
           <p className="mt-2 text-sm text-gray-500 dark:text-white">
             {selectedDay
-              .toJsDate()
+              .getDateObject()
               .toLocaleDateString(isNepaliLanguage ? "ne-NP" : "en-US", {
                 weekday: "long",
               })}
@@ -182,7 +181,7 @@ export default function MonthCalendar({
               month: "long",
               day: "numeric",
               year: "numeric",
-            }).format(selectedDay.toJsDate())}
+            }).format(selectedDay.getDateObject())}
           </h2>
           <p className="mt-2 text-sm text-gray-500 dark:text-white">
             {isNepaliLanguage
@@ -200,12 +199,15 @@ export default function MonthCalendar({
         </div>
         <div className="ml-10 flex-col text-end">
           <h1 className="mt-2 text-sm text-gray-500 dark:text-white">
-            {relativeTimeFromDates(selectedDay.toJsDate(), isNepaliLanguage)}
+            {relativeTimeFromDates(
+              selectedDay.getDateObject(),
+              isNepaliLanguage
+            )}
           </h1>
         </div>
       </div>
       {selectedDayData?.ad && status === "LOGGED_IN" && (
-        <AddEventModal startDate={selectedDay.toJsDate()} />
+        <AddEventModal startDate={selectedDay.getDateObject()} />
       )}
       {!!userEvents?.events?.length &&
         getEventsOfSelectedDay(userEvents, new Date(selectedDayData?.ad))?.map(

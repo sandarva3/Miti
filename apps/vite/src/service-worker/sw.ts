@@ -1,32 +1,35 @@
-declare const self: ServiceWorkerGlobalScope;
+declare const self: ServiceWorkerGlobalScope
 
 interface PeriodicBackgroundSyncEvent extends ExtendableEvent {
-  tag: string;
+  tag: string
 }
 
-import { ExpirationPlugin } from "workbox-expiration";
-import { precacheAndRoute } from "workbox-precaching";
-import { registerRoute } from "workbox-routing";
-import { CacheFirst, NetworkFirst } from "workbox-strategies";
-import { CacheableResponsePlugin } from "workbox-cacheable-response";
-import * as googleAnalytics from "workbox-google-analytics";
-import NepaliDate from "nepali-date-converter";
+import { ExpirationPlugin } from "workbox-expiration"
+import { precacheAndRoute } from "workbox-precaching"
+import { registerRoute } from "workbox-routing"
+import { CacheFirst, NetworkFirst } from "workbox-strategies"
+import { CacheableResponsePlugin } from "workbox-cacheable-response"
+import * as googleAnalytics from "workbox-google-analytics"
+import NepaliDate from "nepali-datetime"
 
-googleAnalytics.initialize();
+googleAnalytics.initialize()
 
-const UPDATE_CHECK = "UPDATE_CHECK";
+const UPDATE_CHECK = "UPDATE_CHECK"
 
 const checkForUpdates = async () => {
-  const { year, month } = new NepaliDate().getBS();
-  const yearData = await fetch(`/data/${year}-calendar.json`).then((res) => res.json());
-  const currentMonthInHumanForm = (month + 1).toString().padStart(2, "0");
-  const monthData = yearData[currentMonthInHumanForm];
-  const startDate = monthData[0].AD_date.ad;
-  const endDate = monthData[monthData.length - 1].AD_date.ad;
-  await fetch(`/api/events?timeMin=${startDate}&timeMax=${endDate}`);
-  Promise.resolve();
-};
-precacheAndRoute(self.__WB_MANIFEST || []);
+  const year = new NepaliDate().getYear()
+  const month = new NepaliDate().getMonth()
+  const yearData = await fetch(`/data/${year}-calendar.json`).then((res) =>
+    res.json()
+  )
+  const currentMonthInHumanForm = (month + 1).toString().padStart(2, "0")
+  const monthData = yearData[currentMonthInHumanForm]
+  const startDate = monthData[0].AD_date.ad
+  const endDate = monthData[monthData.length - 1].AD_date.ad
+  await fetch(`/api/events?timeMin=${startDate}&timeMax=${endDate}`)
+  Promise.resolve()
+}
+precacheAndRoute(self.__WB_MANIFEST || [])
 
 registerRoute(
   /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -42,7 +45,7 @@ registerRoute(
       }),
     ],
   })
-);
+)
 
 registerRoute(
   /^https:\/\/fonts\.gstatic\.com\/.*/i,
@@ -58,7 +61,7 @@ registerRoute(
       }),
     ],
   })
-);
+)
 
 registerRoute(
   /\/api\/.*/i,
@@ -75,23 +78,23 @@ registerRoute(
     ],
   }),
   "GET"
-);
-self.addEventListener("install", () => void self.skipWaiting());
-self.addEventListener("activate", () => void self.clients.claim());
+)
+self.addEventListener("install", () => void self.skipWaiting())
+self.addEventListener("activate", () => void self.clients.claim())
 
 self.addEventListener("notificationclick", (event) => {
-  event.waitUntil(self.clients.openWindow(event.notification.tag));
-  event.notification.close();
-});
+  event.waitUntil(self.clients.openWindow(event.notification.tag))
+  event.notification.close()
+})
 
 self.addEventListener("periodicsync", (event: PeriodicBackgroundSyncEvent) => {
   if (event.tag === UPDATE_CHECK) {
-    event.waitUntil(checkForUpdates());
+    event.waitUntil(checkForUpdates())
   }
-});
+})
 
 self.addEventListener("message", (event) => {
   if (event.data === UPDATE_CHECK) {
-    event.waitUntil(checkForUpdates());
+    event.waitUntil(checkForUpdates())
   }
-});
+})

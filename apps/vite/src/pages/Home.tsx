@@ -3,10 +3,10 @@ import MonthCalendar from "../components/MonthCalendar"
 import { fetchUserEvents, fetchYearlyData } from "../helper/api"
 import YearMonthPicker from "../components/YearMonthPicker"
 import { useParams } from "react-router-dom"
-import NepaliDate from "nepali-date-converter"
+import NepaliDate from "nepali-datetime"
 import { useQuery } from "@tanstack/react-query"
 import Spinner from "../components/Spinner"
-import { CalendarData, DayData, Months } from "../types/calendar.types"
+import { CalendarData, Months } from "../types/calendar.types"
 import { CalendarEventsResult } from "../types/events.types"
 import UpcomingEvents from "./UpcomingEvents"
 
@@ -18,10 +18,11 @@ function Home() {
     const year = parseInt(BSYear)
     const month = parseInt(BSMonth)
     const isValid = year >= 2075 && year <= 2082 && month >= 1 && month <= 12
+
     if (isValid) return new NepaliDate(year, month - 1, 1)
+
     return new NepaliDate()
   }, [BSYear, BSMonth])
-
   const [currentNepaliDate, setCurrentNepaliDate] =
     useState<NepaliDate>(validYearAndMonth)
 
@@ -43,7 +44,7 @@ function Home() {
     networkMode: "offlineFirst",
   })
 
-  const currentMonthInHumanForm = (currentNepaliDate.getBS().month + 1)
+  const currentMonthInHumanForm = (currentNepaliDate.getMonth() + 1)
     .toString()
     .padStart(2, "0") as Months
 
