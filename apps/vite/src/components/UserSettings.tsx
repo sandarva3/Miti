@@ -4,6 +4,7 @@ import { Cog6ToothIcon, MoonIcon, SunIcon } from "@heroicons/react/24/outline"
 import { useTranslation } from "react-i18next"
 import { DarkModeContext } from "./DarkModeProvider"
 import { classNames } from "../helper/utils"
+import { apiBaseUrl } from "../helper/api"
 
 function LoginWithGoogle({ darkMode }: { darkMode: boolean }) {
   return darkMode ? (
@@ -67,8 +68,8 @@ const UserSettings = ({
                 <a
                   href={
                     status == "NOT_LOGGED_IN"
-                      ? `/api/auth/google?redirect=${window.location.origin}`
-                      : "/api/auth/logout"
+                      ? `${apiBaseUrl}/auth/google?redirect=${window.location.origin}`
+                      : `${apiBaseUrl}/auth/logout`
                   }
                   target="_self"
                   className={classNames(

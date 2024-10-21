@@ -16,7 +16,7 @@ const app = new Hono<AppContext>();
 app
   .use(logger())
   .use((c, next) => {
-    const handler = cors({ origin: env(c).WEB_DOMAIN });
+    const handler = cors({ origin: env(c).WEB_DOMAIN, credentials: true });
     return handler(c, next);
   })
   .use((c, next) => {

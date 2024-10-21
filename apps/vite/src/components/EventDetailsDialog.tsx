@@ -12,6 +12,7 @@ import useLanguage from "../helper/useLanguage"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { CalendarEvent } from "../types/events.types"
 import { eventDuration } from "../helper/dates"
+import { deleteEvent } from "../helper/api"
 
 export default function EventDetailsDialog({
   modalOpen,
@@ -29,16 +30,8 @@ export default function EventDetailsDialog({
   function closeModal() {
     onClose()
   }
-  const deleteEvent = async () => {
-    await fetch(`/api/calendar/google/delete/${event.id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-  }
 
-  const { mutateAsync, isLoading } = useMutation(() => deleteEvent(), {
+  const { mutateAsync, isLoading } = useMutation(() => deleteEvent(event), {
     onSuccess: () => {
       queryClient.invalidateQueries(["events"])
       closeModal()

@@ -12,7 +12,7 @@ import NepaliDatePicker from "./NepaliDatePicker"
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query"
 import { CalendarEvent } from "../types/events.types"
 import { toast } from "react-hot-toast"
-import { getCalendarList } from "../helper/api"
+import { apiBaseUrl, createEvent, getCalendarList } from "../helper/api"
 import DropDown from "./DropDown"
 import Spinner from "./Spinner"
 
@@ -23,7 +23,7 @@ function getCombinedDateTime(date: Date, time: string) {
   return date.toISOString()
 }
 //create a type called CalendarPayload which is Partial of CalendarEvent and also includes calendarId
-type CalendarPayload = Partial<CalendarEvent> & { calendarId: string }
+export type CalendarPayload = Partial<CalendarEvent> & { calendarId: string }
 
 function AddEventModal({ startDate }: { startDate: Date }) {
   const [openModel, setOpenModel] = useState(false)
@@ -43,16 +43,7 @@ function AddEventModal({ startDate }: { startDate: Date }) {
     onError: () => {
       toast.error("Something went wrong while creating event")
     },
-    mutationFn: async (eventData: CalendarPayload) => {
-      const res = await fetch("/api/calendar/google/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(eventData),
-      })
-      return await res.json()
-    },
+    mutationFn: (eventData: CalendarPayload) => createEvent(eventData),
   })
   const { data: calendarList, isLoading: isCalendarListLoading } = useQuery({
     queryKey: ["calendarList"],
@@ -102,7 +93,6 @@ function AddEventModal({ startDate }: { startDate: Date }) {
       calendarId: `${selectedCalendar}` || "personal",
     }
     await mutateAsync(eventData)
-    // console.log({ event: data });
   }
   if (!openModel)
     return (

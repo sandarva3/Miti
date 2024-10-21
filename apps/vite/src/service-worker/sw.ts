@@ -15,6 +15,7 @@ import NepaliDate from "nepali-datetime"
 googleAnalytics.initialize()
 
 const UPDATE_CHECK = "UPDATE_CHECK"
+import { apiBaseUrl } from "../helper/api"
 
 const checkForUpdates = async () => {
   const year = new NepaliDate().getYear()
@@ -26,7 +27,7 @@ const checkForUpdates = async () => {
   const monthData = yearData[currentMonthInHumanForm]
   const startDate = monthData[0].AD_date.ad
   const endDate = monthData[monthData.length - 1].AD_date.ad
-  await fetch(`/api/events?timeMin=${startDate}&timeMax=${endDate}`)
+  await fetch(`${apiBaseUrl}/events?timeMin=${startDate}&timeMax=${endDate}`)
   Promise.resolve()
 }
 precacheAndRoute(self.__WB_MANIFEST || [])
