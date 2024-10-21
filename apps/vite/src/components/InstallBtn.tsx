@@ -37,7 +37,7 @@ const InstallPWA = ({
     window.addEventListener("beforeinstallprompt", handler)
     window.addEventListener("appinstalled", () => {
       toast.dismiss()
-      fetch(`${apiBaseUrl}}/installed`, { method: "POST" })
+      fetch(`${apiBaseUrl}/installed`, { method: "POST" })
     })
     return () => window.removeEventListener("transitionend", handler)
   }, [])
