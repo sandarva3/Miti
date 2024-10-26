@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import NepaliDate from "nepali-datetime"
-import { CalendarData, NewCalendarData } from "@miti/types"
+import type NepaliDate from "nepali-datetime"
+import type { CalendarData, NewCalendarData } from "@miti/types"
 
 export const padNumber = (num: number, length: number) =>
   Number.parseInt(num.toString().padStart(length, "0"))

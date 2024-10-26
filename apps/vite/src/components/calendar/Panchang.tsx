@@ -118,12 +118,12 @@ const Panchang = ({ data }: { data: NewCalendarData }) => {
       {/* Kala Muhurat Section */}
       <PanchangSection title="आजको काल / मुहूर्तम्">
         <ul className="divide-y divide-emerald-200 bg-emerald-100 rounded-lg">
-          {data.auspiciousMoments.muhurats.map((muhurat) => (
-            <MuhuratItem
-              name={muhurat.periodName ?? "-"}
-              time={nepaliNumber(muhurat.duration ?? "-")}
-            />
-          ))}
+          {data.auspiciousMoments.muhurats.map((muhurat) => {
+            if (!muhurat.periodName || !muhurat.duration) return null
+            return (
+              <MuhuratItem name={muhurat.periodName} time={muhurat.duration} />
+            )
+          })}
         </ul>
       </PanchangSection>
     </div>

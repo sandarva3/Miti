@@ -19,9 +19,9 @@ const EventList: React.FC<{
 }> = ({ data, isHoliday, title }) => {
   const newEventDetails: Event[] = []
 
-  data.map((day) => {
+  data.forEach((day) => {
     if (day.eventDetails.length > 0) {
-      day.eventDetails.map((event: EventDetail) => {
+      day.eventDetails.forEach((event: EventDetail) => {
         newEventDetails.push({
           date: day.calendarInfo.dates.bs.day.np ?? "",
           enDate: day.calendarInfo.dates.ad.full.en ?? "",

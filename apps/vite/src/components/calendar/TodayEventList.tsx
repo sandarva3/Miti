@@ -15,7 +15,7 @@ export default function TodayEventList({ data }: { data: EventDetail[] }) {
       ) : (
         <div>
           {data.map((event) => (
-            <SingleEvent event={event} />
+            <SingleEvent event={event} key={event.id} />
           ))}
         </div>
       )}

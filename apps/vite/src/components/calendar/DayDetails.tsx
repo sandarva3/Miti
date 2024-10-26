@@ -3,15 +3,16 @@ import { NewCalendarData } from "@miti/types"
 import Panchang from "./Panchang"
 
 export function DayDetail({ dayData }: { dayData: NewCalendarData }) {
+  const isHoliday =
+    dayData.eventDetails.filter((event) => event.isHoliday).length !== 0 ||
+    dayData.calendarInfo.days.codes.en === "7"
   return (
     <div className="overflow-y-auto">
       <div className="flex items-center space-x-4 rounded-lg">
         <div
           className={cn(
             "rounded-lg bg-gray-200 text-center w-16 h-16 flex flex-col gap-1 items-center justify-center",
-            (dayData.eventDetails.find((event) => event.isHoliday) ||
-              dayData.calendarInfo.days.codes.en === "7") &&
-              "text-red-500 bg-red-100"
+            isHoliday && "text-red-500 bg-red-100"
           )}
         >
           <div>
