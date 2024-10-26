@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 import { useUser } from "@miti/query/user"
 import InstallPWA from "./InstallBtn"
 import UserSettings from "./UserSettings"
-import { classNames } from "../helper/utils"
+import { cn } from "@/lib/utils"
 import { apiBaseUrl } from "../helper/api"
 
 export default function Navbar() {
@@ -56,7 +56,7 @@ export default function Navbar() {
                       <Link
                         key={item.name}
                         to={item.href}
-                        className={classNames(
+                        className={cn(
                           item.href === location.pathname
                             ? "bg-gray-300 dark:bg-gray-600"
                             : "text-gray-900 dark:text-white",
@@ -99,7 +99,7 @@ export default function Navbar() {
                 <Disclosure.Button
                   key={item.name}
                   as="div"
-                  className={classNames(
+                  className={cn(
                     item.href === location.pathname
                       ? "bg-gray-300 dark:bg-gray-600 dark:text-gray-900"
                       : "text-gray-900 dark:text-white",

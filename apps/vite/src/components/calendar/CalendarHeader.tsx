@@ -1,10 +1,19 @@
-import React, { useState } from 'react'
-import { classNames } from '../../helper/utils'
-import EventIcon from '../icons/EventIcon'
-import ListIcon from '../icons/ListIcon'
+import React, { useState } from "react"
+import { cn } from "@/lib/utils"
+import EventIcon from "../icons/EventIcon"
+import ListIcon from "../icons/ListIcon"
+import YearMonthPicker from "../YearMonthPicker"
+import NepaliDate from "nepali-datetime"
 
-const CalendarHeader: React.FC<{ month: string; year: string }> = ({ month, year }) => {
-  const [view, setView] = useState<'calendar' | 'event'>('calendar')
+type CalendarHeaderProps = {
+  currentNepaliDate: NepaliDate
+  setCurrentNepaliDate: (date: NepaliDate) => void
+}
+const CalendarHeader: React.FC<CalendarHeaderProps> = ({
+  currentNepaliDate,
+  setCurrentNepaliDate,
+}) => {
+  const [view, setView] = useState<"calendar" | "event">("calendar")
   return (
     <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-5">
       <div className="w-full max-w-7xl">
@@ -13,73 +22,43 @@ const CalendarHeader: React.FC<{ month: string; year: string }> = ({ month, year
             <div className="flex items-center gap-2 flex-1">
               <div className="bg-gray-200 text-sm text-gray-500 leading-none border-2 border-gray-200 rounded-md inline-flex">
                 <button
-                  className={classNames(
-                    'inline-flex items-center transition-colors duration-300 ease-in focus:outline-none hover:text-blue-400 focus:text-blue-400 rounded-md px-2 py-2 active',
-                    view === 'calendar' ? 'bg-white' : ''
+                  className={cn(
+                    "inline-flex items-center transition-colors duration-300 ease-in focus:outline-none hover:text-blue-400 focus:text-blue-400 rounded-md px-2 py-2 active",
+                    view === "calendar" ? "bg-white" : ""
                   )}
                   id="grid"
-                  onClick={() => setView('calendar')}
+                  onClick={() => setView("calendar")}
                 >
                   <EventIcon />
                 </button>
                 <button
-                  className={classNames(
-                    'inline-flex items-center transition-colors duration-300 ease-in focus:outline-none hover:text-blue-400 focus:text-blue-400 rounded-md px-2 py-2',
-                    view === 'event' ? 'bg-white' : ''
+                  className={cn(
+                    "inline-flex items-center transition-colors duration-300 ease-in focus:outline-none hover:text-blue-400 focus:text-blue-400 rounded-md px-2 py-2",
+                    view === "event" ? "bg-white" : ""
                   )}
                   id="list"
-                  onClick={() => setView('event')}
+                  onClick={() => setView("event")}
                 >
                   <ListIcon />
                 </button>
               </div>
-              <button className="hidden md:flex py-2 pl-1.5 pr-3 rounded-md bg-gray-50 border border-gray-300 items-center gap-1.5 text-xs font-medium text-gray-900 transition-all duration-500 hover:">
+              <button
+                className="hidden md:flex py-2 pl-1.5 pr-3 rounded-md bg-gray-50 border border-gray-300 items-center gap-1.5 text-xs font-medium text-gray-900 transition-all duration-500 hover:bg-gray-200"
+                onClick={() => setCurrentNepaliDate(new NepaliDate())}
+              >
                 <EventIcon />
                 Today
               </button>
             </div>
           </div>
-          <div className="flex items-center gap-2 flex-1 justify-center">
-            <button className="text-gray-500 rounded transition-all duration-300 hover: hover:text-gray-900">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={16}
-                height={16}
-                viewBox="0 0 16 16"
-                fill="none"
-              >
-                <path
-                  d="M10.0002 11.9999L6 7.99971L10.0025 3.99719"
-                  stroke="currentcolor"
-                  strokeWidth="1.3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-            <h5 className="text-xl leading-8 font-semibold text-gray-900">
-              {month} {year}
-            </h5>
-            <button className="text-gray-500 rounded transition-all duration-300 hover: hover:text-gray-900">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={16}
-                height={16}
-                viewBox="0 0 16 16"
-                fill="none"
-              >
-                <path
-                  d="M6.00236 3.99707L10.0025 7.99723L6 11.9998"
-                  stroke="currentcolor"
-                  strokeWidth="1.3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          </div>
+
+          <YearMonthPicker
+            currentNepaliDate={currentNepaliDate}
+            setCurrentNepaliDate={setCurrentNepaliDate}
+          />
+
           <div className="flex items-center justify-end gap-2 flex-1">
-            {view === 'event' && (
+            {view === "event" && (
               <div className="flex items-center gap-px p-1 rounded-md bg-gray-100">
                 <button className="py-2 px-5 rounded-lg bg-gray-100 text-xs font-medium text-gray-900 transition-all duration-300 hover:bg-white">
                   Day
