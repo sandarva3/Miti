@@ -35,7 +35,7 @@ const EventList: React.FC<{
   })
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg">
+    <div className="p-4 bg-white shadow-md rounded-lg min-w-80 w-80">
       <h2 className="text-xl font-bold text-gray-700 mb-2 text-center">
         {title}
       </h2>

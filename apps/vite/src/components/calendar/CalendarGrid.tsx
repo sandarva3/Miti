@@ -83,10 +83,10 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ monthData }) => {
                     {day.tithiDetails?.title.np}
                   </p>
                 </div>
-                <p className="flex-1 grow w-full flex items-center justify-center text-xl md:text-3xl lg:text-4xl text-center font-semibold my-auto line-clamp-1">
+                <p className="grow w-full flex items-center justify-center text-xl md:text-3xl lg:text-4xl text-center font-semibold my-auto line-clamp-1">
                   {day.calendarInfo.dates.bs.day.np}
                 </p>
-                <p className="text-xs text-center hidden xl:block">
+                <p className="text-xs flex-1 text-center hidden xl:block">
                   {day.eventDetails[0]?.title.np}
                 </p>
               </div>

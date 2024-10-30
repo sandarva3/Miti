@@ -15,7 +15,7 @@ const Today = ({ data, isLoading }: TodayProps) => {
   const today = new NepaliDate()
 
   return (
-    <div className=" bg-white shadow-md flex-row items-center border rounded-lg p-4">
+    <div className=" bg-white shadow-md flex-row items-center border rounded-lg min-w-80 p-4">
       {/* Top Section */}
       <div>
         {!isLoading && data ? (

@@ -67,20 +67,13 @@ const Calendar2 = () => {
   }, [calendarData, nextMonthData])
 
   return (
-    <section className="relative bg-stone-50 text-sm">
+    <section className="relative bg-stone-50 container">
       <Debugger />
       <div className="w-full relative">
         <div className="w-full px-2 py-2 mx-auto">
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="flex flex-col gap-4 order-2 sm:order-1 flex-wrap md:flex-nowrap">
               <Today data={todayData} isLoading={todayDataLoading} />
-              {/* {todayData?.eventDetails && (
-                <EventList
-                  data={todayData}
-                  title="आजको इभेन्टहरू"
-                  singleDayEvents
-                />
-              )} */}
               {todayData?.eventDetails && (
                 <TodayEventList data={todayData?.eventDetails} />
               )}

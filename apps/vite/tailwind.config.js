@@ -10,6 +10,12 @@ export default {
       gridAutoRows: {
         cell: "72px",
       },
+      container: {
+        center: true,
+        screens: {
+          xl: "1660px",
+        },
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

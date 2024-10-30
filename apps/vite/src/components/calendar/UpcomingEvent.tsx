@@ -23,7 +23,7 @@ const UpcomingEvent: React.FC<{
         <span className="flex flex-row">
           <p
             className={cn(
-              "font-bold text-left flex-1",
+              "font-bold text-left w-10 flex-1 text-ellipsis",
               isHoliday ? "text-red-500" : "text-gray-700"
             )}
           >
