@@ -4,7 +4,6 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 
 import { authMiddleware } from "./auth/auth.middleware";
-import { initializeLucia } from "./auth/lucia-auth";
 import type { AppContext } from "./context";
 import { AuthController } from "./controller/auth/auth.controller";
 import { GoogleCalendarController } from "./controller/calendar/google-calendar.controller";
@@ -22,7 +21,6 @@ app
   })
   .use((c, next) => {
     initalizeDB(c);
-    initializeLucia(c);
     return next();
   })
   .post("/installed", (c) => {
