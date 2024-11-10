@@ -10,8 +10,6 @@ import { processCalendarData } from "./helpers/calendarUtils"
 import { getNepaliMonthAndYear } from "./helpers/dateUtils"
 import type { CalendarDayData, ProcessedDay } from "./types/types"
 
-// Import the new component
-
 const CalendarBody: React.FC = () => {
   const [calendarData, setCalendarData] = useState<ProcessedDay[][]>([])
   const [selectedDay, setSelectedDay] = useState<ProcessedDay | null>(null)

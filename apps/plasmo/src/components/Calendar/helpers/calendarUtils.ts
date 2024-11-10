@@ -29,17 +29,17 @@ export const processCalendarData = (
     const isWeekend = ["Saturday"].includes(
       dayData.calendarInfo.days.dayOfWeek.en
     )
-
     // Check if any event is marked as holiday
     const isHoliday = dayData.eventDetails.some((event) => event.isHoliday)
-    const holidayEvent = dayData.eventDetails.find((event) => event.isHoliday)
 
     const day: ProcessedDay = {
       date: englishDate,
       NepaliNum: dayData.calendarInfo.dates.bs.day.np,
       isWeekend,
       isHoliday,
-      holidayTitle: holidayEvent?.title.np || "",
+      holidayTitle: dayData.eventDetails
+        .map((event) => event.title.np)
+        .join(" | "),
       tithi: dayData.tithiDetails?.title.np || "", // Add tithi information
       isToday: englishDate === todayDate
     }

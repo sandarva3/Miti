@@ -79,8 +79,8 @@ export const getRelativeDayText = (dayDiff: number): string => {
   if (dayDiff === 0) return "today"
   if (dayDiff === 1) return "tomorrow"
   if (dayDiff === -1) return "yesterday"
-  if (dayDiff > 1) return `${dayDiff} days after`
-  return `${Math.abs(dayDiff)} days before`
+  if (dayDiff > 1) return `in ${dayDiff} days`
+  return `${Math.abs(dayDiff)} days ago`
 }
 
 export const getFormattedDate = (

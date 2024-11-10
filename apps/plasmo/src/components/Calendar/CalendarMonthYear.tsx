@@ -141,7 +141,7 @@ export const MonthYearSelect = ({
   }
 
   return (
-    <div className="plasmo-flex plasmo-items-center plasmo-gap-3">
+    <div className="plasmo-flex plasmo-items-center plasmo-justify-center plasmo-gap-3">
       <button
         onClick={handlePreviousMonth}
         className="plasmo-p-1 plasmo-rounded hover:plasmo-bg-gray-700 focus:plasmo-outline-none focus:plasmo-ring-2 plasmo-ring-blue-500"

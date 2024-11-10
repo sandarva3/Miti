@@ -20,6 +20,7 @@ const DateWithEvents: React.FC<DateWithEventsProps> = ({
   selectedYear,
   selectedMonth
 }) => {
+  console.log(selectedDay)
   if (!selectedDay || selectedDay.empty) {
     return null
   }
