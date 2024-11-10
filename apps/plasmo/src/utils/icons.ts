@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import iconSrc1 from "url:../../assets/day-icon/day-1.png"
 import iconSrc2 from "url:../../assets/day-icon/day-2.png"
 import iconSrc3 from "url:../../assets/day-icon/day-3.png"
