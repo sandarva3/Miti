@@ -1,12 +1,6 @@
 import * as React from "react"
 
 import useMediaQuery from "@/hooks/useMediaQuery"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
 
 import {
   Drawer,
@@ -15,6 +9,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet"
 
 export function DayDialog({
   open,
@@ -29,14 +24,14 @@ export function DayDialog({
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>आजको विवरण</DialogTitle>
-          </DialogHeader>
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent className="overflow-y-auto min-w-[500px]">
+          <SheetHeader>
+            <SheetTitle>आजको विवरण</SheetTitle>
+          </SheetHeader>
           {children}
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
     )
   }
 
