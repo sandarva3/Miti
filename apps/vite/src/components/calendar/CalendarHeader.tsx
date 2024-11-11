@@ -8,12 +8,15 @@ import NepaliDate from "nepali-datetime"
 type CalendarHeaderProps = {
   currentNepaliDate: NepaliDate
   setCurrentNepaliDate: (date: NepaliDate) => void
+  view: "calendar" | "event"
+  setView: (view: "calendar" | "event") => void
 }
 const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   currentNepaliDate,
   setCurrentNepaliDate,
+  view,
+  setView,
 }) => {
-  const [view, setView] = useState<"calendar" | "event">("calendar")
   return (
     // <div className="flex flex-row gap-4 items-center justify-between mb-5">
     //   <div className="w-full max-w-7xl">

@@ -1,4 +1,4 @@
-import { cn } from "../helper/utils"
+import { cn } from "@/lib/utils"
 
 function Spinner({ className }: { className?: string }) {
   return (

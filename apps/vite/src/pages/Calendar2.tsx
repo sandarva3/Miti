@@ -15,12 +15,12 @@ import {
   useTodayData,
 } from "@miti/query/calendar"
 import { NewCalendarData } from "@miti/types"
-import { DayDialog } from "@/components/calendar/DayDialog"
-import { DayDetail } from "@/components/calendar/DayDetails"
 import TodayEventList from "@/components/calendar/TodayEventList"
+import TimelineView from "@/components/calendar/TimelineView"
 
 const Calendar2 = () => {
   const { BSYear, BSMonth } = useParams()
+  const [view, setView] = useState<"calendar" | "event">("calendar")
 
   const validYearAndMonth = useMemo(() => {
     if (!BSYear || !BSMonth) return new NepaliDate()
@@ -45,7 +45,7 @@ const Calendar2 = () => {
     )
   }, [currentNepaliDate])
 
-  const { data: calendarData, isLoading } = useCalendarData(currentNepaliDate)
+  const { data: calendarData } = useCalendarData(currentNepaliDate)
 
   const currentMonth = currentNepaliDate.getMonth() + 1
 
@@ -83,8 +83,14 @@ const Calendar2 = () => {
               <CalendarHeader
                 currentNepaliDate={currentNepaliDate}
                 setCurrentNepaliDate={setCurrentNepaliDate}
+                view={view}
+                setView={setView}
               />
-              <CalendarGrid monthData={monthData} />
+              {view === "calendar" ? (
+                <CalendarGrid monthData={monthData} />
+              ) : (
+                <TimelineView monthData={monthData} />
+              )}
             </div>
             <div className="flex flex-col gap-4 order-3 ">
               <EventList data={combinedData} title="आगामी इभेन्टहरु" />
