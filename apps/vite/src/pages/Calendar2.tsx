@@ -21,6 +21,7 @@ import TimelineView from "@/components/calendar/TimelineView"
 const Calendar2 = () => {
   const { BSYear, BSMonth } = useParams()
   const [view, setView] = useState<"calendar" | "event">("calendar")
+  const [scope, setScope] = useState<"month" | "week" | "day">("week")
 
   const validYearAndMonth = useMemo(() => {
     if (!BSYear || !BSMonth) return new NepaliDate()
@@ -85,11 +86,13 @@ const Calendar2 = () => {
                 setCurrentNepaliDate={setCurrentNepaliDate}
                 view={view}
                 setView={setView}
+                scope={scope}
+                setScope={setScope}
               />
               {view === "calendar" ? (
                 <CalendarGrid monthData={monthData} />
               ) : (
-                <TimelineView monthData={monthData} />
+                <TimelineView monthData={monthData} scope={scope} />
               )}
             </div>
             <div className="flex flex-col gap-4 order-3 ">

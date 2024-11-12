@@ -41,8 +41,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ monthData }) => {
         ))}
       </div>
       <div
-        className="grid grid-cols-7 rounded-b-xl overflow-hidden
-         border-indigo-200  border bg-gray-100 gap-0.5 md:gap-1
+        className="grid grid-cols-7 rounded-b-xl overflow-hidden border-indigo-200 border bg-gray-100 gap-0.5 md:gap-1
       "
       >
         {monthData?.map((day, index) => {
